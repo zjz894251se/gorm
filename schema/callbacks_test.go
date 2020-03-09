@@ -12,10 +12,10 @@ import (
 type UserWithCallback struct {
 }
 
-func (UserWithCallback) BeforeSave(*gorm.DB) {
+func (UserWithCallback) BeforeSave(gorm.DB) {
 }
 
-func (UserWithCallback) AfterCreate(*gorm.DB) {
+func (UserWithCallback) AfterCreate(gorm.DB) {
 }
 
 func TestCallback(t *testing.T) {

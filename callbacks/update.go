@@ -9,7 +9,7 @@ import (
 	"github.com/jinzhu/gorm/clause"
 )
 
-func BeforeUpdate(db *gorm.DB) {
+func BeforeUpdate(db gorm.DB) {
 	if db.Statement.Schema != nil && (db.Statement.Schema.BeforeSave || db.Statement.Schema.BeforeUpdate) {
 		callMethod := func(value interface{}) bool {
 			var ok bool
@@ -42,7 +42,7 @@ func BeforeUpdate(db *gorm.DB) {
 	}
 }
 
-func Update(db *gorm.DB) {
+func Update(db gorm.DB) {
 	db.Statement.AddClauseIfNotExists(clause.Update{})
 	db.Statement.AddClause(ConvertToAssignments(db.Statement))
 	db.Statement.Build("UPDATE", "SET", "WHERE")
@@ -56,7 +56,7 @@ func Update(db *gorm.DB) {
 	}
 }
 
-func AfterUpdate(db *gorm.DB) {
+func AfterUpdate(db gorm.DB) {
 	if db.Statement.Schema != nil && (db.Statement.Schema.AfterSave || db.Statement.Schema.AfterUpdate) {
 		callMethod := func(value interface{}) bool {
 			var ok bool

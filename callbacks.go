@@ -11,7 +11,7 @@ import (
 	"github.com/jinzhu/gorm/utils"
 )
 
-func initializeCallbacks(db *DB) *callbacks {
+func initializeCallbacks(db DB) *callbacks {
 	return &callbacks{
 		processors: map[string]*processor{
 			"create": &processor{db: db},
@@ -30,8 +30,8 @@ type callbacks struct {
 }
 
 type processor struct {
-	db        *DB
-	fns       []func(*DB)
+	db        DB
+	fns       []func(DB)
 	callbacks []*callback
 }
 
@@ -41,8 +41,8 @@ type callback struct {
 	after     string
 	remove    bool
 	replace   bool
-	match     func(*DB) bool
-	handler   func(*DB)
+	match     func(DB) bool
+	handler   func(DB)
 	processor *processor
 }
 
@@ -71,8 +71,8 @@ func (cs *callbacks) Raw() *processor {
 }
 
 func (p *processor) Execute(db *DB) {
-	curTime := time.Now()
 	if stmt := db.Statement; stmt != nil {
+		curTime := time.Now()
 		if stmt.Model == nil {
 			stmt.Model = stmt.Dest
 		}
@@ -82,14 +82,13 @@ func (p *processor) Execute(db *DB) {
 				db.AddError(err)
 			}
 		}
+
 		stmt.ReflectValue = reflect.Indirect(reflect.ValueOf(stmt.Dest))
-	}
 
-	for _, f := range p.fns {
-		f(db)
-	}
+		for _, f := range p.fns {
+			f(*db)
+		}
 
-	if stmt := db.Statement; stmt != nil {
 		db.Error = stmt.Error
 		db.RowsAffected = stmt.RowsAffected
 
@@ -102,7 +101,7 @@ func (p *processor) Execute(db *DB) {
 	}
 }
 
-func (p *processor) Get(name string) func(*DB) {
+func (p *processor) Get(name string) func(DB) {
 	for i := len(p.callbacks) - 1; i >= 0; i-- {
 		if v := p.callbacks[i]; v.name == name && !v.remove {
 			return v.handler
@@ -119,11 +118,11 @@ func (p *processor) After(name string) *callback {
 	return &callback{after: name, processor: p}
 }
 
-func (p *processor) Match(fc func(*DB) bool) *callback {
+func (p *processor) Match(fc func(DB) bool) *callback {
 	return &callback{match: fc, processor: p}
 }
 
-func (p *processor) Register(name string, fn func(*DB)) error {
+func (p *processor) Register(name string, fn func(DB)) error {
 	return (&callback{processor: p}).Register(name, fn)
 }
 
@@ -131,7 +130,7 @@ func (p *processor) Remove(name string) error {
 	return (&callback{processor: p}).Remove(name)
 }
 
-func (p *processor) Replace(name string, fn func(*DB)) error {
+func (p *processor) Replace(name string, fn func(DB)) error {
 	return (&callback{processor: p}).Replace(name, fn)
 }
 
@@ -159,7 +158,7 @@ func (c *callback) After(name string) *callback {
 	return c
 }
 
-func (c *callback) Register(name string, fn func(*DB)) error {
+func (c *callback) Register(name string, fn func(DB)) error {
 	c.name = name
 	c.handler = fn
 	c.processor.callbacks = append(c.processor.callbacks, c)
@@ -174,7 +173,7 @@ func (c *callback) Remove(name string) error {
 	return c.processor.compile()
 }
 
-func (c *callback) Replace(name string, fn func(*DB)) error {
+func (c *callback) Replace(name string, fn func(DB)) error {
 	logger.Default.Info("replacing callback `%v` from %v\n", name, utils.FileWithLineNum())
 	c.name = name
 	c.handler = fn
@@ -193,7 +192,7 @@ func getRIndex(strs []string, str string) int {
 	return -1
 }
 
-func sortCallbacks(cs []*callback) (fns []func(*DB), err error) {
+func sortCallbacks(cs []*callback) (fns []func(DB), err error) {
 	var (
 		names, sorted []string
 		sortCallback  func(*callback) error

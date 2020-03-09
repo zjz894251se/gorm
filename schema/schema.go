@@ -171,10 +171,10 @@ func Parse(dest interface{}, cacheStore *sync.Map, namer Namer) (*Schema, error)
 	for _, name := range callbacks {
 		if methodValue := reflectValue.MethodByName(name); methodValue.IsValid() {
 			switch methodValue.Type().String() {
-			case "func(*gorm.DB)": // TODO hack
+			case "func(gorm.DB)": // TODO hack
 				reflect.Indirect(reflect.ValueOf(schema)).FieldByName(name).SetBool(true)
 			default:
-				logger.Default.Warn("Model %v don't match %vInterface, should be %v(*gorm.DB)", schema, name, name)
+				logger.Default.Warn("Model %v don't match %vInterface, should be %v(gorm.DB)", schema, name, name)
 			}
 		}
 	}

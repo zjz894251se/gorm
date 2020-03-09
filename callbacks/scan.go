@@ -8,7 +8,7 @@ import (
 	"github.com/jinzhu/gorm/schema"
 )
 
-func Scan(rows *sql.Rows, db *gorm.DB) {
+func Scan(rows *sql.Rows, db gorm.DB) {
 	columns, _ := rows.Columns()
 	values := make([]interface{}, len(columns))
 

@@ -36,7 +36,7 @@ type Config struct {
 
 // DB GORM DB definition
 type DB struct {
-	*Config
+	Config
 	Error        error
 	RowsAffected int64
 	Statement    *Statement
@@ -88,11 +88,11 @@ func Open(dialector Dialector, config *Config) (db DB, err error) {
 	}
 
 	db = DB{
-		Config: config,
+		Config: *config,
 		clone:  true,
 	}
 
-	db.callbacks = initializeCallbacks(&db)
+	db.callbacks = initializeCallbacks(db)
 
 	if dialector != nil {
 		err = dialector.Initialize(&db)
@@ -102,24 +102,20 @@ func Open(dialector Dialector, config *Config) (db DB, err error) {
 
 // Session create new db session
 func (db DB) Session(config *Session) DB {
-	var (
-		tx       = db.getInstance()
-		txConfig = *tx.Config
-	)
+	tx := db.getInstance()
 
 	if config.Context != nil {
 		tx.Statement.Context = config.Context
 	}
 
 	if config.Logger != nil {
-		txConfig.Logger = config.Logger
+		tx.Config.Logger = config.Logger
 	}
 
 	if config.NowFunc != nil {
-		txConfig.NowFunc = config.NowFunc
+		tx.Config.NowFunc = config.NowFunc
 	}
 
-	tx.Config = &txConfig
 	tx.clone = true
 	return tx
 }

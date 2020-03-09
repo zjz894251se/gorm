@@ -33,11 +33,11 @@ func getFuncName(fc interface{}) string {
 	return fnames[len(fnames)-1]
 }
 
-func c1(*gorm.DB) {}
-func c2(*gorm.DB) {}
-func c3(*gorm.DB) {}
-func c4(*gorm.DB) {}
-func c5(*gorm.DB) {}
+func c1(gorm.DB) {}
+func c2(gorm.DB) {}
+func c3(gorm.DB) {}
+func c4(gorm.DB) {}
+func c5(gorm.DB) {}
 
 func TestCallbacks(t *testing.T) {
 	type callback struct {
@@ -47,8 +47,8 @@ func TestCallbacks(t *testing.T) {
 		remove  bool
 		replace bool
 		err     string
-		match   func(*gorm.DB) bool
-		h       func(*gorm.DB)
+		match   func(gorm.DB) bool
+		h       func(gorm.DB)
 	}
 
 	datas := []struct {

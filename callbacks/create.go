@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm/clause"
 )
 
-func BeforeCreate(db *gorm.DB) {
+func BeforeCreate(db gorm.DB) {
 	if db.Statement.Schema != nil && (db.Statement.Schema.BeforeSave || db.Statement.Schema.BeforeCreate) {
 		callMethod := func(value interface{}) bool {
 			var ok bool
@@ -40,10 +40,10 @@ func BeforeCreate(db *gorm.DB) {
 	}
 }
 
-func SaveBeforeAssociations(db *gorm.DB) {
+func SaveBeforeAssociations(db gorm.DB) {
 }
 
-func Create(db *gorm.DB) {
+func Create(db gorm.DB) {
 	db.Statement.AddClauseIfNotExists(clause.Insert{
 		Table: clause.Table{Name: db.Statement.Table},
 	})
@@ -72,10 +72,10 @@ func Create(db *gorm.DB) {
 	}
 }
 
-func SaveAfterAssociations(db *gorm.DB) {
+func SaveAfterAssociations(db gorm.DB) {
 }
 
-func AfterCreate(db *gorm.DB) {
+func AfterCreate(db gorm.DB) {
 	if db.Statement.Schema != nil && (db.Statement.Schema.AfterSave || db.Statement.Schema.AfterCreate) {
 		callMethod := func(value interface{}) bool {
 			var ok bool

@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm/clause"
 )
 
-func RowQuery(db *gorm.DB) {
+func RowQuery(db gorm.DB) {
 	if db.Statement.SQL.String() == "" {
 		db.Statement.AddClauseIfNotExists(clause.Select{})
 		db.Statement.AddClauseIfNotExists(clause.From{})

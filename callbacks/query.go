@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm/clause"
 )
 
-func Query(db *gorm.DB) {
+func Query(db gorm.DB) {
 	if db.Statement.SQL.String() == "" {
 		db.Statement.AddClauseIfNotExists(clause.Select{})
 		db.Statement.AddClauseIfNotExists(clause.From{})
@@ -24,10 +24,10 @@ func Query(db *gorm.DB) {
 	Scan(rows, db)
 }
 
-func Preload(db *gorm.DB) {
+func Preload(db gorm.DB) {
 }
 
-func AfterQuery(db *gorm.DB) {
+func AfterQuery(db gorm.DB) {
 	if db.Statement.Schema != nil && db.Statement.Schema.AfterFind {
 		callMethod := func(value interface{}) bool {
 			if db.Statement.Schema.AfterFind {

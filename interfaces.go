@@ -36,37 +36,37 @@ type TxCommiter interface {
 }
 
 type BeforeCreateInterface interface {
-	BeforeCreate(*DB)
+	BeforeCreate(DB)
 }
 
 type AfterCreateInterface interface {
-	AfterCreate(*DB)
+	AfterCreate(DB)
 }
 
 type BeforeUpdateInterface interface {
-	BeforeUpdate(*DB)
+	BeforeUpdate(DB)
 }
 
 type AfterUpdateInterface interface {
-	AfterUpdate(*DB)
+	AfterUpdate(DB)
 }
 
 type BeforeSaveInterface interface {
-	BeforeSave(*DB)
+	BeforeSave(DB)
 }
 
 type AfterSaveInterface interface {
-	AfterSave(*DB)
+	AfterSave(DB)
 }
 
 type BeforeDeleteInterface interface {
-	BeforeDelete(*DB)
+	BeforeDelete(DB)
 }
 
 type AfterDeleteInterface interface {
-	AfterDelete(*DB)
+	AfterDelete(DB)
 }
 
 type AfterFindInterface interface {
-	AfterFind(*DB)
+	AfterFind(DB)
 }

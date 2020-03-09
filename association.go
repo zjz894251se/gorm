@@ -4,6 +4,6 @@ package gorm
 type Association struct {
 }
 
-func (db *DB) Association(column string) *Association {
+func (db DB) Association(column string) *Association {
 	return nil
 }

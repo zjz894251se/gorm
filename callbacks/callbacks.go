@@ -4,8 +4,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func RegisterDefaultCallbacks(db *gorm.DB) {
-	enableTransaction := func(db *gorm.DB) bool {
+func RegisterDefaultCallbacks(db gorm.DB) {
+	enableTransaction := func(db gorm.DB) bool {
 		return !db.SkipDefaultTransaction
 	}
 

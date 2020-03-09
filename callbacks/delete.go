@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm/clause"
 )
 
-func BeforeDelete(db *gorm.DB) {
+func BeforeDelete(db gorm.DB) {
 	if db.Statement.Schema != nil && db.Statement.Schema.BeforeDelete {
 		callMethod := func(value interface{}) bool {
 			if db.Statement.Schema.BeforeDelete {
@@ -32,7 +32,7 @@ func BeforeDelete(db *gorm.DB) {
 	}
 }
 
-func Delete(db *gorm.DB) {
+func Delete(db gorm.DB) {
 	if db.Statement.SQL.String() == "" {
 		db.Statement.AddClauseIfNotExists(clause.Delete{})
 
@@ -66,7 +66,7 @@ func Delete(db *gorm.DB) {
 	}
 }
 
-func AfterDelete(db *gorm.DB) {
+func AfterDelete(db gorm.DB) {
 	if db.Statement.Schema != nil && db.Statement.Schema.AfterDelete {
 		callMethod := func(value interface{}) bool {
 			if db.Statement.Schema.AfterDelete {
