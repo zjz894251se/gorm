@@ -11,6 +11,10 @@ The fantastic ORM library for Golang, aims to be developer friendly.
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![GoDoc](https://godoc.org/github.com/jinzhu/gorm?status.svg)](https://godoc.org/github.com/jinzhu/gorm)
 
+## 温馨提示
+
+自用，修改了scope.go 文件，增加了force标记用来规避0值问题，请移步官方版本！！！
+
 ## Overview
 
 * Full-Featured ORM (almost)
